@@ -1,6 +1,6 @@
 <?php
 $_SESSION["pokedex"] = array();
-
+$_SESSION["log"] = array();
 
 //----------- EXISTING POKEMONS -----------
 
@@ -18,7 +18,7 @@ $_SESSION["pokedex"] = array();
 
 /**
  * Generates a pokemon array with this values:
- * @param string $num
+ * @param string $number
  * @param string $name
  * @param string $region
  * @param array $type
@@ -27,9 +27,9 @@ $_SESSION["pokedex"] = array();
  * @param int $evo
  * @param string $img (path)
  */
-function createPok($num, $name, $region, $type, $height, $weight, $evo, $img){
+function createPok($number, $name, $region, $type, $height, $weight, $evo, $img){
     $pokemon = array(
-        "num"    => $num,
+        "number"    => $number,
         "name"      => $name,
         "region"    => $region,
         "type"      => $type,
@@ -47,15 +47,15 @@ function createPok($num, $name, $region, $type, $height, $weight, $evo, $img){
  * @param string $key
  * @param string|int|float|array $val
  */
-function logPok($pokemon){
+function printPok($pokemon){
     echo "<div class='pokemonLog'>
             <table id='pokemonTable';>
                 <tr>
                 <td colspan='2' align='center'><img src=".$pokemon['img']."></img></td>
                 </tr>
                 <tr>
-                <td>Number</td>
-                <td>" .$pokemon["num"]. "</td>
+                <td>numberber</td>
+                <td>" .$pokemon["number"]. "</td>
                 </tr>
                 <tr>
                 <td>Name</td>
@@ -89,10 +89,10 @@ function logPok($pokemon){
 /**
  * Logs all pokemons in $_SESSION["pokedex"] in a basic html table
  */
-function logPokedex(){
+function printPokedex(){
     echo "<div class='pokedexLog'>";
     foreach($_SESSION["pokedex"] as $pokemon) {
-       logPok($pokemon);
+       printPok($pokemon);
     }
     echo "</div>";
 };
@@ -106,12 +106,13 @@ function addPok($pokemon){
     $addState = "";
     if (!pokemonExists($pokemon)){
         array_push($_SESSION["pokedex"], $pokemon);
-        $addState = "Pokemon added successfully";
+        $addState = $pokemon['name']." added successfully";
     } else {
         $addState = "Failed to add " .$pokemon["name"]. " to the pokedex beacause it already exists.";
-        echo "<script>console.log('-- ERROR --".$pokemon["name"] ." already exists')</script>";
+/*         echo "<script type='text/javascript'>window.onload = function(){alert('$addState')};</script>"; */
     }
     $_SESSION['addPokState'] = $addState;
+    array_push($_SESSION['log'], $addState);
 };
 
 
@@ -123,13 +124,16 @@ function addPok($pokemon){
  */
 function rmPok($key, $val){
     $rmState = "";
+    $pokemon = getPokemon($key, $val);
     if (pokemonExistsWith($key, $val)){
         array_splice($_SESSION["pokedex"], pokemonIndex($key, $val), 1);
-        $rmState = "Pokemon removed successfully";
+        $rmState = $pokemon['name']." removed successfully";
     } else {
         $rmState = "Failed to remove pokemon with $key = $val beacause it doesn't exists in the pokedex";
     }
     $_SESSION['rmPokState'] = $rmState;
+    array_push($_SESSION['log'], $rmState);
+
 };
 
 
@@ -142,13 +146,31 @@ function rmPok($key, $val){
  * @return void
  */
 function modPok($key, $val, $newVal){
-    if ($key = "img"){
-        $_SESSION["pokedex"][pokemonIndex($key , $val)][$key] = "/Pokedex/media/".$newVal.".png";
-    }else {
-        $_SESSION["pokedex"][pokemonIndex($key , $val)][$key] = $newVal;
+    $modState = "";
+    if (pokemonExistsWith($key, $val)) {
+        $pokemon = getPokemon($key, $val);
+        if ($key == "img"){
+            $_SESSION["pokedex"][$pokemon][$key] = "/Pokedex/media/".$newVal.".png";
+        }else {
+            $_SESSION["pokedex"][$pokemon][$key] = $newVal;
+        }
+        $modState = $pokemon['name']." has been modified $key: $val to $newVal";
+    } else {
+        $modState = "couldnt find pokemon with $key: $val";
     }
+    array_push($_SESSION['log'], $modState);
     
 };
+
+function printLogEntries(){
+    echo "<script>";
+    $i=0;
+    foreach ($_SESSION['log'] as $entrie) {
+        echo"console.log('$i:  $entrie');";
+        $i++;
+    }
+    echo"</script>";
+}
 
 
 /**

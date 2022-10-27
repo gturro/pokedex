@@ -15,7 +15,7 @@
             "name": "Launch Chrome",
             "request": "launch",
             "type": "chrome",
-            "url": "http://localhost:8888/Pokedex/index.php",
+            "url": "http://localhost:8888/pokedex/testing.php",
             "webRoot": "${workspaceFolder}",
             "runtimeArgs": ["--incognito"],
         },

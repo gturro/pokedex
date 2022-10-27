@@ -14,7 +14,7 @@
     <?php include'../php_partials/menu.php'?>
     
     <div class="container-fluid">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 mx-3">
                 <?php 
                 foreach ($_SESSION['pokedex'] as $pokemon) {
                 echo

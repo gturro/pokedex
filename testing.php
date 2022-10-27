@@ -16,18 +16,22 @@ session_start();
 <h1>MY POKEDEX</h1>
     <?php
 
-    //var_dump($_SESSION["pokedex"]);//debugg
-    logPokedex();
 
-    //logPok("number", "004");
+    //var_dump($_SESSION["pokedex"]);//debugg
+    printPokedex();
+
+    //printPok("number", "004");
 
     //DEBUG
-    /* modPok("name", "Charmander", "Charmeleon");
+    modPok("name", "Charmander", "Charmeleon");
     modPok("number", "004", "005");
+    rmPok("number", 003);
+    addPok(createPok("006", "Charizard", "Jotho", ["Fire", "Flying"], 170, 90.5, 2, "006"));
     modPok("img", "./media/004.png", "./media/005.png");
-    logPokedex(); 
-    echo "pok 002 index: " . findPokByNum("002");
-    */
+    rmPok("name", "Charmander");
+    //printPokedex(); 
+    //echo "pok 002 index: " . findPokByNum("002");
+    printLogEntries();
     
     ?>
 </body>

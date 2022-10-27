@@ -7,7 +7,6 @@ body {
   background-position: initial;
   background-repeat: no-repeat;
   background-size: cover;
-  margin-right: 30px
 }
 
 
@@ -29,19 +28,18 @@ body {
 }
 
 .card-wrapper{
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 85vh;
-  margin-left: auto;
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  margin: 60px auto;
 }
 
-#Formcard{
-  width: 980px;
+.form-label, .form-check-label {
+margin: auto;
 }
-.form-label {
-  padding-top: 10px;
+
+#formCard{
+  width: 750px;
 }
 
 #formSubmit{
