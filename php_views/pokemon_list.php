@@ -14,17 +14,17 @@
     <?php include'../php_partials/menu.php'?>
     
     <div class="container-fluid">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 mx-3">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 mx-3 g-4">
                 <?php 
                 foreach ($_SESSION['pokedex'] as $pokemon) {
                 echo
                 "<div class='col'>
-                    <div class='card border-secondary'>
+                    <div class='card h-100 border-secondary'>
                         <img class='card-img-top' src='".$pokemon['img']."' alt='pokemon image'>
                         <div class='card-body'>
                             <ul class='list-group list-group-flush'>
                                 <li class='list-group-item'>"
-                                .$pokemon['num']." - ".$pokemon['name'].
+                                .$pokemon['number']." - ".$pokemon['name'].
                                 "</li>
                                 <li class='list-group-item'>";
                                     foreach ($pokemon['type'] as $type) {

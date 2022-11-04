@@ -14,6 +14,7 @@
 </head>
 <body>
     <?php include '../php_partials/menu.php'?>
+
     <div class="card-wrapper">
         <div class="card rounded border border-2 border-dark" id="formCard">
             <div class="card-title text-white bg-secondary mb-0">
@@ -21,7 +22,7 @@
                 Pokemon
             </div>
             <div class="card-body">
-                <form id="pokForm" action="">
+                <form id="pokForm" action="post" enctype=”multipart/form-data”>
                     <!--Pokemon number-->
                     <div class="row mb-3">
                         <label for="pokNum" class="col-sm-2 form-label">Number</label>

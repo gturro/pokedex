@@ -7,32 +7,38 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="./style/style.css">
-    <?php include "./php_librarys/pokedex_array.php" ?>
+    <script src="https://kit.fontawesome.com/45d5fbd6ce.js" crossorigin="anonymous"></script>
+    <script src="./assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php include './php_librarys/pokedex_array.php'; ?>
     <title>My Pokedex</title>
 </head>
 <body>
+<?php include './php_partials/menu.php';?>
+
 
 <h1>MY POKEDEX</h1>
     <?php
-
-
     //var_dump($_SESSION["pokedex"]);//debugg
-    printPokedex();
 
     //printPok("number", "004");
 
     //DEBUG
     modPok("name", "Charmander", "Charmeleon");
+    modPok("height", 1000, 1);
     modPok("number", "004", "005");
     rmPok("number", 003);
+    modPok("name","Caterpie", "Manuel");
     addPok(createPok("006", "Charizard", "Jotho", ["Fire", "Flying"], 170, 90.5, 2, "006"));
     modPok("img", "./media/004.png", "./media/005.png");
-    rmPok("name", "Charmander");
+    rmPok("name", "Jose");
+    modPok("number", 999, 045);
     //printPokedex(); 
     //echo "pok 002 index: " . findPokByNum("002");
     printLogEntries();
     
+    printPokedex();
     ?>
 </body>
 </html>

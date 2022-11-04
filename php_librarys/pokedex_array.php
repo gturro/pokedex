@@ -1,6 +1,10 @@
 <?php
 $_SESSION["pokedex"] = array();
-$_SESSION["log"] = array();
+$_SESSION["log"] = array(
+    "added" => array(),
+    "removed" => array(),
+    "modified" => array()
+);
 
 //----------- EXISTING POKEMONS -----------
 
@@ -36,7 +40,7 @@ function createPok($number, $name, $region, $type, $height, $weight, $evo, $img)
         "height"    => $height,
         "weight"    => $weight,
         "evo"       => $evo,
-        "img"       => "/Pokedex/media/".$img.".png"
+        "img"       => "/Pokedex/media/pokemons/".$number.".png"
     );
     return $pokemon;
 }
@@ -54,7 +58,7 @@ function printPok($pokemon){
                 <td colspan='2' align='center'><img src=".$pokemon['img']."></img></td>
                 </tr>
                 <tr>
-                <td>numberber</td>
+                <td>number</td>
                 <td>" .$pokemon["number"]. "</td>
                 </tr>
                 <tr>
@@ -100,7 +104,7 @@ function printPokedex(){
 
 /**
  * ADD @param array $pokemon to the Pokedex
- * push function resolution state to $_SESSION['addPokState']
+ * push add state to log events $_SESSION['log']
  */
 function addPok($pokemon){
     $addState = "";
@@ -111,10 +115,8 @@ function addPok($pokemon){
         $addState = "Failed to add " .$pokemon["name"]. " to the pokedex beacause it already exists.";
 /*         echo "<script type='text/javascript'>window.onload = function(){alert('$addState')};</script>"; */
     }
-    $_SESSION['addPokState'] = $addState;
-    array_push($_SESSION['log'], $addState);
+    array_push($_SESSION['log']['added'], $addState);
 };
-
 
 /**
  * REMOVE pokemon from the Pokedex with:
@@ -129,17 +131,13 @@ function rmPok($key, $val){
         array_splice($_SESSION["pokedex"], pokemonIndex($key, $val), 1);
         $rmState = $pokemon['name']." removed successfully";
     } else {
-        $rmState = "Failed to remove pokemon with $key = $val beacause it doesn't exists in the pokedex";
+        $rmState = "Failed to remove pokemon with $key = $val beacause it doesnt exists in the pokedex";
     }
-    $_SESSION['rmPokState'] = $rmState;
-    array_push($_SESSION['log'], $rmState);
-
+    array_push($_SESSION['log']['removed'], $rmState);
 };
 
 
 /**
- * Undocumented function
- *
  * @param [type] $key
  * @param [type] $val
  * @param [type] $newVal
@@ -149,25 +147,29 @@ function modPok($key, $val, $newVal){
     $modState = "";
     if (pokemonExistsWith($key, $val)) {
         $pokemon = getPokemon($key, $val);
-        if ($key == "img"){
-            $_SESSION["pokedex"][$pokemon][$key] = "/Pokedex/media/".$newVal.".png";
+        if ($key == "img"){ //en el caso que sea img hardcode la ruta para no tenerla que introducir entera como parametro.
+            $_SESSION["pokedex"][pokemonIndex($key, $val)][$key] = "/Pokedex/media/pokemons/".$newVal.".png";
         }else {
-            $_SESSION["pokedex"][$pokemon][$key] = $newVal;
+            $_SESSION["pokedex"][pokemonIndex($key, $val)][$key] = $newVal;
         }
         $modState = $pokemon['name']." has been modified $key: $val to $newVal";
     } else {
         $modState = "couldnt find pokemon with $key: $val";
     }
-    array_push($_SESSION['log'], $modState);
-    
+    array_push($_SESSION['log']['modified'], $modState);
 };
 
 function printLogEntries(){
     echo "<script>";
-    $i=0;
-    foreach ($_SESSION['log'] as $entrie) {
-        echo"console.log('$i:  $entrie');";
-        $i++;
+    
+    foreach ($_SESSION['log'] as $entrie => $value ) {
+        $i=1;
+        echo"console.log('$entrie: ');";
+        foreach ( $value as $state){
+            echo "console.log('$i: $state');";
+            $i++;
+        }
+        
     }
     echo"</script>";
 }
@@ -206,16 +208,10 @@ function pokemonExists($pokemon){
  * If not throws error and prints it to console.log
  * @param string $key
  * @param string|int|float|array $val
- * @return void|array $pokemon
+ * @return array $pokemon
  */
-function getPokemon($key, $val){
-    $pokemon = $_SESSION["pokedex"][pokemonIndex($key, $val)];
-    if (pokemonExists($pokemon)){
-        return $pokemon;
-    } else {
-        echo "Pokemon with with $key = $val doesn't exists.";
-        echo "<script>console.log('-- ERROR -- \nPokemon with with $key = $val doesn't exists.</script>";
-    }
+function getPokemon($key, $val){ 
+        return $_SESSION["pokedex"][pokemonIndex($key, $val)];
 };
 
 /**
