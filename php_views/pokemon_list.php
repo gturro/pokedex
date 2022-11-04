@@ -34,14 +34,14 @@
                             </ul>
                         </div>
                         <div class='card-footer'>
-                            <form class='delatePokForm' action='' method=''>
-                                <button class='btn btn-outline-danger' type='submit'>
+                            <form class='delatePokForm' action='/pokedex/php_controller/pokemonController.php' method='post'>
+                                <button class='btn btn-outline-danger' type='submit' name='delatePokemon'>
                                     <i class='fa-solid fa-trash-can'></i>
                                 </button>
                                 <input type='hidden'>
                             </form>
-                            <form class='editPokForm' action='' method='get'>
-                                <button class='btn btn-outline-primary' type='submit'>
+                            <form class='editPokForm' action='/pokedex/php_controller/pokemonController.php' method='post'>
+                                <button class='btn btn-outline-primary' type='submit' name='modifyPokemon'>
                                     <i class='fa-solid fa-pen-to-square'></i>
                                 </button>
                                 <input type='hidden'>

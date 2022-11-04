@@ -31,7 +31,7 @@ $_SESSION["log"] = array(
  * @param int $evo
  * @param string $img (path)
  */
-function createPok($number, $name, $region, $type, $height, $weight, $evo, $img){
+function createPok($number, $name, $region, $type, $height, $weight, $evo){
     $pokemon = array(
         "number"    => $number,
         "name"      => $name,

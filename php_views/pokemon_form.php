@@ -22,7 +22,7 @@
                 Pokemon
             </div>
             <div class="card-body">
-                <form id="pokForm" action="post" enctype=”multipart/form-data”>
+                <form id="pokForm" action="/pokedex/php_controller/pokemonController.php" method="post" enctype="multipart/form-data">
                     <!--Pokemon number-->
                     <div class="row mb-3">
                         <label for="pokNum" class="col-sm-2 form-label">Number</label>
@@ -151,7 +151,7 @@
                     <!--Submit bttn-->
                     <div id="formSubmit" class="input-group float-end mb-3">
                         <a href="/Pokedex/index.php" class="btn rounded btn-secondary ms-2 me-2">Cancel</a>
-                        <input type="submit" class="btn rounded btn-primary ms-2 me-2" value="Accept">
+                        <input type="submit" name="createPokemon" class="btn rounded btn-primary ms-2 me-2" value="Accept">
                     </div>
                 </form>
             </div>
