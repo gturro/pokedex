@@ -16,13 +16,13 @@
             "name": "Xdebug",
             "type": "php",
             "request": "launch",
-            "port": 9000
+            "port": 9003
         },
         {
             "name": "Chrome",
             "request": "launch",
             "type": "chrome",
-            "url": "http://localhost:8888/pokedex/index.php",
+            "url": "http://localhost:8080/pokedex/index.php",
             "webRoot": "${workspaceFolder}",
             "runtimeArgs": ["--incognito"],
         },

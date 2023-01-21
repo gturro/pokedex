@@ -25,20 +25,21 @@ session_start();
     //printPok("number", "004");
 
     //DEBUG
-    modPok("name", "Charmander", "Charmeleon");
-    modPok("height", 1000, 1);
-    modPok("number", "004", "005");
-    rmPok("number", 003);
-    modPok("name","Caterpie", "Manuel");
+    /* modifyPokemon("name", "Charmander", "Charmeleon");
+    modifyPokemon("height", 1000, 1);
+    modifyPokemon("number", "004", "005");
+    
+    deletePokemon("number", 003);
+    modifyPokemon("name","Caterpie", "Manuel");
     addPok(createPok("006", "Charizard", "Jotho", ["Fire", "Flying"], 170, 90.5, 2, "006"));
-    modPok("img", "./media/004.png", "./media/005.png");
-    rmPok("name", "Jose");
-    modPok("number", 999, 045);
+    modifyPokemon("img", "./media/004.png", "./media/005.png");
+    deletePokemon("name", "Jose");
+    modifyPokemon("number", 999, 045);
     //printPokedex(); 
     //echo "pok 002 index: " . findPokByNum("002");
     printLogEntries();
     
-    printPokedex();
+    printPokedex(); */
     ?>
 </body>
 </html>

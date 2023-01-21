@@ -1,13 +1,27 @@
 <?php
-$_SESSION["pokedex"] = array();
-$_SESSION["log"] = array(
-    "added" => array(),
-    "removed" => array(),
-    "modified" => array()
+//include '/Applications/MAMP/htdocs/pokedex/php_partials/errors_check.php';
+
+/* if (!isset($_SESSION["pokedex_init"])) {
+    $_SESSION["pokedex"] = array();
+    initPokedex();
+} */
+/* $_SESSION["errors"] = array(
+    "add" => false,
+    "modify" => false,
+    "delete" => false
 );
 
-//----------- EXISTING POKEMONS -----------
+$_SESSION["errors_msg"] = array(
+    "add" => "",
+    "delete" => "",
+    "modify" => ""
+); */
 
+
+
+//----------- EXISTING POKEMONS -----------
+function initPokedex(){
+    $_SESSION["pokedex_init"] = true;
     addPok(createPok("001", "Bulbasur", "Hoen", ["Grass", "Poison"], 70, 6.9, 0, "001"));
     addPok(createPok("002", "Ivysaur", "Hoen", ["Grass", "Poison"], 100, 13, 1, "002"));
     addPok(createPok("003","Venusaur", "Hoen", ["Grass", "Poison"], 200, 100, 2, "003" ));
@@ -18,7 +32,11 @@ $_SESSION["log"] = array(
     addPok(createPok("008", "Wartortle", "Kanto", ["Water"], 100, 22.5, 1, "008"));
     addPok(createPok("009", "Blastoise", "Kanto", ["Water"], 160, 85.5, 2, "009"));
     addPok(createPok("010", "Caterpie", "Kanto", ["Bug"], 30, 2.9, 0, "010"));
-
+    unset($_SESSION['errors']['add']);
+    unset($_SESSION['errors_msg']['add']);
+    
+}
+   
 
 /**
  * Generates a pokemon array with this values:
@@ -107,33 +125,35 @@ function printPokedex(){
  * push add state to log events $_SESSION['log']
  */
 function addPok($pokemon){
-    $addState = "";
     if (!pokemonExists($pokemon)){
         array_push($_SESSION["pokedex"], $pokemon);
-        $addState = $pokemon['name']." added successfully";
+        $_SESSION["errors"]["add"] = false;
+        $_SESSION['errors_msg']['add'] = $pokemon['name']." added successfully";
     } else {
-        $addState = "Failed to add " .$pokemon["name"]. " to the pokedex beacause it already exists.";
-/*         echo "<script type='text/javascript'>window.onload = function(){alert('$addState')};</script>"; */
+        $_SESSION["errors"]["add"] = true;
+        $_SESSION['errors_msg']['add'] = "Failed to add " .$pokemon["name"]. " to the pokedex beacause it already exists.";
     }
-    array_push($_SESSION['log']['added'], $addState);
+    //checkStatus();
 };
 
 /**
- * REMOVE pokemon from the Pokedex with:
+ * DELETE pokemon from the Pokedex with:
  * @param string $key
  * @param string|int|float|array $val
- * push function resolution state to $SESSION['rmPokState']
+ * push function resolution state to $SESSION['deletePokemonState']
  */
-function rmPok($key, $val){
-    $rmState = "";
+function deletePokemon($key, $val){
     $pokemon = getPokemon($key, $val);
     if (pokemonExistsWith($key, $val)){
         array_splice($_SESSION["pokedex"], pokemonIndex($key, $val), 1);
-        $rmState = $pokemon['name']." removed successfully";
+        $_SESSION["errors"]["delete"] = false;
+        $_SESSION['errors_msg']['delete'] = $pokemon['name']." deleted successfully";
     } else {
-        $rmState = "Failed to remove pokemon with $key = $val beacause it doesnt exists in the pokedex";
+        $_SESSION["errors"]["delete"] = true;
+        $_SESSION['errors_msg']['delete'] = "Failed to delete pokemon with $key = $val beacause it doesnt exists in the pokedex";
+
     }
-    array_push($_SESSION['log']['removed'], $rmState);
+    //checkStatus();
 };
 
 
@@ -143,8 +163,7 @@ function rmPok($key, $val){
  * @param [type] $newVal
  * @return void
  */
-function modPok($key, $val, $newVal){
-    $modState = "";
+function modifyPokemon($key, $val, $newVal){
     if (pokemonExistsWith($key, $val)) {
         $pokemon = getPokemon($key, $val);
         if ($key == "img"){ //en el caso que sea img hardcode la ruta para no tenerla que introducir entera como parametro.
@@ -152,11 +171,13 @@ function modPok($key, $val, $newVal){
         }else {
             $_SESSION["pokedex"][pokemonIndex($key, $val)][$key] = $newVal;
         }
-        $modState = $pokemon['name']." has been modified $key: $val to $newVal";
+        $_SESSION['errors_msg']['modfiy'] = $pokemon['name']." has been modified $key: $val to $newVal";
+        $_SESSION["errors"]["modfiy"] = false;
     } else {
-        $modState = "couldnt find pokemon with $key: $val";
+        $_SESSION["errors"]["modfiy"] = true;
+        $_SESSION['errors_msg']['modify'] = "Couldn't find pokemon with $key: $val";
     }
-    array_push($_SESSION['log']['modified'], $modState);
+    //checkStatus();
 };
 
 function printLogEntries(){
@@ -204,14 +225,14 @@ function pokemonExists($pokemon){
 
 
 /**
- * If pokemon with $key=$val exixts retuns pokemon array
+ * retuns pokemon with $key $val if exixts  
  * If not throws error and prints it to console.log
  * @param string $key
  * @param string|int|float|array $val
  * @return array $pokemon
  */
 function getPokemon($key, $val){ 
-        return $_SESSION["pokedex"][pokemonIndex($key, $val)];
+    return $_SESSION["pokedex"][pokemonIndex($key, $val)];
 };
 
 /**
