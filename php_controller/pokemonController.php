@@ -11,10 +11,11 @@ if ( isset($_POST['addPokemon']) ) {
         newPokemon(); //CREATE POKEMON
     }
 }
+
 //CREATE POKEMON
 function newPokemon() {
-    if (!isset($_POST['type'])){
-        $_POST['type'] = array();
+    if (!isset($_POST['tipos'])){
+        $_POST['tipos'] = array();
     }
     
     $_SESSION["pokemon"] = array(
@@ -36,6 +37,8 @@ function newPokemon() {
     if (insertPokemon($pokemon["numero"], $pokemon["nombre"], $pokemon["altura"], $pokemon["peso"], $pokemon["evolucion"], $pokemon["regiones_id"], $pokemon["tipos"], $pokemon["imagen"])) {
         $_SESSION['success'] = "[".$pokemon["numero"]." - ".$pokemon["nombre"]."] added.";
         goToList();
+    } else {
+        goToForm();
     }
     
 }

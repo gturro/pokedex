@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once '../php_librarys/bd.php';
 if (isset($_SESSION["pokemon"])){
     $setForm = true;
 } else{
@@ -17,7 +18,6 @@ if (isset($_SESSION["pokemon"])){
     <link rel="stylesheet" href="/Pokedex/style/style.css">
     <script src="https://kit.fontawesome.com/45d5fbd6ce.js" crossorigin="anonymous"></script>
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <?php include '../php_librarys/pokedex_array.php'; ?>
     <title>Pokemon Form</title>
 </head>
 
@@ -73,235 +73,47 @@ if (isset($_SESSION["pokemon"])){
                             </div>
                         </div>
 
+                        <?php  $regions = selectRegions(); ?>
                         <!--Pokemon Region-->
                         <div class="row mb-3">
                             <label for="regiones_id" class="col-sm-2 form-label">Region</label>
                             <div class="col-10">
                                 <select name="regiones_id" class="form-select" id="regiones_id" required>
-                                    <option value="1" 
-                                    <?php
+                                <?php foreach ($regions as $region) {
+                                    echo "<option value='".$region['id'] ."'";
                                     if($setForm){
-                                        if($_SESSION['pokemon']['regiones_id'] == 1){ //Kanto
+                                        if($_SESSION['pokemon']['regiones_id'] === $region['id']){ //Kanto
                                             echo"selected";
                                         }
                                     }
-                                    ?>
-                                    >Kanto</option>
-                                    <option value="2"
-                                    <?php
-                                    if($setForm){
-                                        if($_SESSION['pokemon']['regiones_id'] === 2){ //Jotho
-                                            echo"selected";
-                                        }
-                                    }
-                                    ?>
-                                    >Jotho</option>
-                                    <option value="3"
-                                    <?php
-                                    if($setForm){
-                                        if($_SESSION['pokemon']['regiones_id'] === 3){ //Hoenn
-                                            echo"selected";
-                                        }
-                                    }
-                                    ?>
-                                    >Hoenn</option>
-                                    <option value="4"
-                                    <?php
-                                    if($setForm){
-                                        if($_SESSION['pokemon']['regiones_id'] === 4){ //Sinnoh
-                                            echo"selected";
-                                        }
-                                    }
-                                    ?>
-                                    >Sinnoh</option>
-                                    <option value="5"
-                                    <?php
-                                    if($setForm){
-                                        if($_SESSION['pokemon']['regiones_id'] === 5){ //Teselia
-                                            echo"selected";
-                                        }
-                                    }
-                                    ?>
-                                    >Teselia</option>
+                                    echo ">".$region['nombre']."</option>";
+                                  } ?>
                                 </select>
                             </div>
                         </div>
-                
+                       
+                        <?php $types = selectTypes() ?>
                         <!-- Pokemon types  -->
                         <div class="row mb-3">
-                            <label class="col-sm-2 form-check-label">Type</label>
+                            <label class="col-sm-2 form-check-label">Types</label>
                             <div class="col-10">
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="grassType" value="Grass"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Grass"){
-                                                    echo "checked";
-                                                    break;
+                        <?php foreach ($types as $type) { ?>
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox" class="form-check-input" name="tipos[][id]" id="<?php echo strtolower($type['nombre']) ?>Type" value="<?php echo $type['id'] ?>"
+                                        <?php
+                                        if($setForm){
+                                            if ($_SESSION['pokemon']['tipos'] != null) {
+                                                foreach($_SESSION['pokemon']['tipos'] as $pokType){
+                                                    if($pokType["id"] == $type['id']){
+                                                        echo "checked";
+                                                        break;
+                                                    }
                                                 }
                                             }
-                                        }
-                                        
-                                    }
-                                    ?>
-                                    >
-                                    <label for="grassType" class="form-check-label">Grass</label>
+                                        } ?> >
+                                        <label for="<?php echo strtolower($type['nombre']) ?>Type" class="form-check-label"><?php echo $type['nombre'] ?></label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="posionType" value="Poison"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Poison"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="posionType" class="form-check-label">Poison</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="fireType" value="Fire"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Fire"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="fireType" class="form-check-label">Fire</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="flyingType" value="Flying"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Flying"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="flyingType" class="form-check-label">Flying</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="waterType" value="Water"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Water"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="waterType" class="form-check-label">Water</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="electricType" value="Electric"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Electric"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="electricType" class="form-check-label">Electric</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="fairyType" value="Fairy"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Fairy"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="fairyType" class="form-check-label">Fairy</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="bugType" value="Bug"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Bug"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="bugType" class="form-check-label">Bug</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="fightingType" value="Fighting"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Fighting"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    >
-                                    <label for="fightingType" class="form-check-label">Fighting</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tipos[][typeName]" id="psychicType" value="Psychic"
-                                    <?php
-                                    if($setForm){
-                                        if ($_SESSION['pokemon']['tipos'] != null) {
-                                            foreach($_SESSION['pokemon']['tipos'] as $type){
-                                                if($type["typeName"] === "Psychic"){
-                                                    echo "checked";
-                                                    break;
-                                                }
-                                            }
-                                        }     
-                                    }
-                                    ?>
-                                    >
-                                    <label for="psychicType" class="form-check-label">Psychic</label>
-                                </div>
+                            <?php } ?>
                             </div>
                         </div>
 
@@ -389,6 +201,7 @@ if (isset($_SESSION["pokemon"])){
                                 <input type="file" class="rounded rounded" name="pokImg" id="pokImg" accept="image/png, image/jpeg" style="padding-top:10px;">
                             </div>
                         </div>
+
                         <!--Submit bttn-->
                         <div id="formSubmit" class="input-group float-end mb-3">
                             <a href="/Pokedex/php_views/pokemon_list.php" class="btn rounded btn-secondary ms-2 me-2">Cancel</a>

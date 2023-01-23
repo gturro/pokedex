@@ -28,7 +28,7 @@ if (isset($_SESSION['editPokemon'])) { unset($_SESSION["editPokemon"]); }
         <?php foreach ($_SESSION['pokedex'] as $pokemon) { ?>
                 <div class='col'>
                     <div class='card h-100 border-secondary'>
-                        <img class='card-img-top' src='<?php echo $pokemon['imagen'];?>' alt='pokemon image'>
+                        <img class='card-img-top' src='<?php echo $pokemon['imagen'];?>' alt='pokemon_<?php echo $pokemon['numero'] ?>'>
                         <div class='card-body'>
                             <ul class='list-group list-group-flush'>
                                 <li class='list-group-item'>
@@ -37,7 +37,7 @@ if (isset($_SESSION['editPokemon'])) { unset($_SESSION["editPokemon"]); }
                                 <li class='list-group-item'>
                                 <?php 
                                 foreach ($pokemon["tipos"] as $type) {
-                                        echo "<span class='badge ".typeBadgeColor($type["typeName"])."'>".$type['typeName']."</span>";  
+                                        echo "<span class='badge ".typeBadgeColor($type["nombre"])."'>".$type['nombre']."</span>";  
                                     } ?>
                                 </li>
                             </ul>

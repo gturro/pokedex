@@ -1,17 +1,5 @@
 <?php
-/*  
-    TYPES: 
-        (1, 'Planta');
-        (2, 'Veneno');
-        (3, 'Fuego');
-        (4, 'Volador');
-        (5, 'Agua');
-        (6, 'Eléctrico');
-        (7, 'Hada');
-        (8, 'Bicho');
-        (9, 'Lucha');
-        (10, 'Psíquico'); 
-*/
+
 
 function openDB() {
     $servername = "localhost";
@@ -147,7 +135,7 @@ function selectPokemonTypes($id) {
     try {
         $conn = openDB();
 
-        $sql = "SELECT tipos_has_pokemons.tipos_id as typeID, tipos.nombre as typeName FROM tipos_has_pokemons INNER JOIN tipos ON tipos.id = tipos_has_pokemons.tipos_id WHERE tipos_has_pokemons.pokemons_id = :id;";
+        $sql = "SELECT tipos_has_pokemons.tipos_id as id, tipos.nombre as nombre FROM tipos_has_pokemons INNER JOIN tipos ON tipos.id = tipos_has_pokemons.tipos_id WHERE tipos_has_pokemons.pokemons_id = :id;";
     
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":id", $id);
@@ -185,10 +173,10 @@ function insertPokemon($number, $name, $height, $weight, $evo, $region, $types, 
 
         if ($types != null) {
             foreach ($types as $type) {
-                $sql = "INSERT INTO tipos_has_pokemons (tipos_id, pokemons_id) SELECT tipos.id, :id FROM tipos WHERE tipos.nombre=:type";
+                $sql = "INSERT INTO tipos_has_pokemons (tipos_id, pokemons_id) SELECT tipos.id, :id FROM tipos WHERE tipos.id=:type";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(":id", $id);
-                $stmt->bindParam(":type", $type["typeName"]);
+                $stmt->bindParam(":type", $type["id"]);
                 $stmt->execute();
             }
         }
@@ -275,10 +263,10 @@ function updatePokemon($id, $number, $name, $height, $weight, $evo, $region, $ty
     
         //insert all new types
         foreach ($types as $type) {
-            $sql = "INSERT INTO tipos_has_pokemons SELECT tipos.id, :id FROM tipos WHERE tipos.nombre = :typeName";
+            $sql = "INSERT INTO tipos_has_pokemons SELECT tipos.id, :id FROM tipos WHERE tipos.id = :tipoID";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(":id", $id);
-            $stmt->bindParam(":typeName", $type["typeName"]); //WATCH TYPENAME
+            $stmt->bindParam(":tipoID", $type["id"]); //WATCH tipoNombre
             $stmt->execute();
         }
     
@@ -303,7 +291,7 @@ function errorMssg($e, $number = null, $name = null) {
                     $mssg = "Can not modify more than one base table through a join view";
                 break;
             case 1062:
-                    $mssg = "This pokemon ".$number." - ".$name." already exists";
+                    $mssg = "Pokemon with number: ".$number." or name: ".$name." already exists";
                 break;
             case 2002:
                     $mssg = "Conection to database refused";
